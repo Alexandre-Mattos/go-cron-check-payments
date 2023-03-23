@@ -2,7 +2,8 @@ package main
 
 import (
 	"go-cron-check-payments/app"
-	"go-cron-check-payments/kernel"
+	"go-cron-check-payments/logger"
+	//"go-cron-check-payments/kernel"
 )
 
 func main() {
@@ -12,5 +13,9 @@ func main() {
 		panic(err)
 	}
 
-	kernel.Run()
+	errors := logger.Send("GOLANG ESTEVE AQUI")
+	if errors != "" {
+		panic(errors)
+	}
+	//kernel.Run()
 }
