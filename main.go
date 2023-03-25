@@ -13,9 +13,10 @@ func main() {
 		panic(err)
 	}
 
-	errors := logger.Send("GOLANG ESTEVE AQUI")
-	if errors != "" {
-		panic(errors)
+	err = logger.Send("GOLANG ESTEVE AQUI", "error")
+
+	if err != nil {
+		panic(err)
 	}
 	//kernel.Run()
 }
