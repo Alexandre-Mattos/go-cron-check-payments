@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -57,10 +58,8 @@ func Send(text string, warning string) error {
 	}
 
 	errors := slack.Send(webhookUrl, "", payload)
-	if (errors) != nil {
-		for err := range errors {
-			panic(err)
-		}
+	for _, err := range errors {
+		fmt.Println(err)
 	}
 
 	return nil

@@ -3,6 +3,7 @@ module go-cron-check-payments
 go 1.20
 
 require (
+	github.com/Alexandre-Mattos/go-asaas-sdk-main v0.1.1
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20200209025033-430dd4e66960
 	github.com/go-co-op/gocron v1.19.0
 	github.com/joho/godotenv v1.5.1

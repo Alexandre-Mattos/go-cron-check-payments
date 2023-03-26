@@ -1,3 +1,5 @@
+github.com/Alexandre-Mattos/go-asaas-sdk-main v0.1.1 h1:lPx4iqcL2f31oK8n+ITT+1TzZhEHInOjIJPWBWpTrhc=
+github.com/Alexandre-Mattos/go-asaas-sdk-main v0.1.1/go.mod h1:1IemdYAdpU1GnYjCXd2yGdLACW40hINbA6J6e9tsmBQ=
 github.com/ashwanthkumar/slack-go-webhook v0.0.0-20200209025033-430dd4e66960 h1:MIEURpsIpyLyy+dZ+GnL8T5P49Tco0ik9cYaUQNnAxE=
 github.com/ashwanthkumar/slack-go-webhook v0.0.0-20200209025033-430dd4e66960/go.mod h1:97O1qkjJBHSSaWJxsTShRIeFy0HWiygk+jnugO9aX3I=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -24,6 +26,8 @@ github.com/parnurzeal/gorequest v0.2.16/go.mod h1:3Kh2QUMJoqw3icWAecsyzkpY7UzRfD
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+github.com/rafaeltokyo/asaas-go-sdk v0.0.0-20191115182011-e4777bfd8a7f h1:b/6drLg29Lr5J/FCsRXiHYi1HtZXumHfh40Ruct2aKw=
+github.com/rafaeltokyo/asaas-go-sdk v0.0.0-20191115182011-e4777bfd8a7f/go.mod h1:ASG8Ki99r7WuBSgq08w5kjZQxylKfKcihq/lJlEf2Jk=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/rogpeppe/go-charset v0.0.0-20180617210344-2471d30d28b4/go.mod h1:qgYeAmZ5ZIpBWTGllZSQnw97Dj+woV0toclVaRGI8pc=

@@ -1,26 +1,33 @@
 package commands
 
 import (
+	"fmt"
+	"go-cron-check-payments/asaas"
 	"go-cron-check-payments/database"
 	"go-cron-check-payments/logger"
 	"go-cron-check-payments/models"
+	"strconv"
+	"strings"
 
 	"log"
 	"time"
 )
 
-func CreatePayments() error {
+func CreatePayments() {
 
 	db, err := database.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	var contasID []string
+
 	var empresas []models.Empresa
 	empresaInicio := 1
 	dataGeracao := time.Now()
 
-	db.Where("empresas.id >= ?", empresaInicio).
+	db.Model(&models.Empresa{}).
+		Where("empresas.id >= ?", empresaInicio).
 		Where("status = ?", "A").
 		Where("asaas_key IS NOT NULL").
 		Joins("JOIN configuracoes ON empresas.id = configuracoes.empresa_id").
@@ -28,36 +35,58 @@ func CreatePayments() error {
 		Group("empresas.id").
 		Find(&empresas)
 
-	log, err := logger.NewLogger()
 	if err != nil {
 		panic(err)
 	}
-	defer log.Close()
-
-	log.Info("info message")
 
 	for _, empresa := range empresas {
-		diasCobrancaAutomatica := dataGeracao.AddDate(0, 0, time.Parse(empresa.DiasBoletoAutomatico)).Format("2006-01-02")
+
+		var diasBoletoAutomatico int
+
+		if empresa.DiasBoletoAutomatico != 0 {
+			diasBoletoAutomatico = empresa.DiasBoletoAutomatico
+		} else {
+			diasBoletoAutomatico = 10
+		}
+
+		diasCobrancaAutomatica := dataGeracao.AddDate(0, 0, diasBoletoAutomatico).Format("2006-01-02")
+
+		fmt.Println(diasCobrancaAutomatica)
 
 		var contas []models.Conta
-		db.Where("empresa_id = ?", empresa.ID).
+		db.Model(&models.Conta{}).
+			Where("contas.empresa_id = ?", empresa.ID).
 			Where("data_vencimento = ?", diasCobrancaAutomatica).
-			Where("status = ?", "A").
+			Where("situacao = ?", "em_aberto").
+			Where("contas.tipo = ?", "recebimento").
+			Where("data_cancelamento IS NULL").
+			Where("contas.origem_id IS NOT NULL").
 			Where("geracao_automatica_boleto = ?", true).
-			Where("NOT EXISTS (SELECT 1 FROM cobrancas WHERE cobrancas.conta_id = contas.id AND cobrancas.status != 'canceled')").
-			Joins("JOIN locacoes ON locacoes.id = contas.locacao_id").
-			Joins("JOIN inquilinos ON inquilinos.locacao_id = locacoes.id").
-			Where("inquilinos.forma_cobranca = ?", "boleto_bancario").
+			Where("NOT EXISTS (SELECT 1 FROM boletos WHERE boletos.conta_id = contas.id AND boletos.status != 0)").
+			Joins("LEFT JOIN locacoes ON locacoes.id = contas.origem_id").
+			Joins("JOIN locacao_inquilinos ON locacao_inquilinos.locacao_id = locacoes.id").
+			Joins("LEFT JOIN clientes ON clientes.id = contas.cliente_id").
+			Where("locacao_inquilinos.forma_cobranca = ?", "boleto_bancario").
+			Select("contas.valor, contas.descricao, contas.empresa_id, contas.origem_id, clientes.customer_id as customer_id, contas.id").
 			Find(&contas)
 
 		for _, conta := range contas {
-			var cobrancas []models.Cobranca
-			db.Where("conta_id = ?", conta.ID).
-				Where("status != ?", "canceled").
-				Find(&cobrancas)
+			fmt.Println(conta.ID)
 
-			// Process cobrancas
-			// ...
+			var pointer *models.Cobranca = new(models.Cobranca)
+			pointer, success := asaas.CreatePayment(conta)
+			if pointer != nil {
+				cobranca := *pointer
+				if success {
+					contasID = append(contasID, strconv.Itoa(cobranca.ContaID))
+				}
+			}
+		}
+
+		if len(contasID) >= 1 {
+			logger.Send("Contas geradas em "+time.Now().String()+": "+strings.Join(contasID, ","), "success")
+		} else {
+			logger.Send("Nenhuma cobrança gerada em: "+time.Now().Format("2006-01-02 15:04:05"), "warning")
 		}
 	}
 
@@ -67,6 +96,4 @@ func CreatePayments() error {
 		panic(err)
 	}
 	sqlDB.Close()
-
-	return nil
 }

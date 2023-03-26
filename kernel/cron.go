@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"fmt"
+	"go-cron-check-payments/commands"
 	"time"
 
 	"github.com/go-co-op/gocron"
@@ -9,11 +9,7 @@ import (
 
 func Run() error {
 	cron := gocron.NewScheduler(time.UTC)
-	var count int = 0
-	cron.Every(10).Seconds().Do(func() {
-		fmt.Println("Vezes rodado: ", count)
-		count++
-	})
+	cron.Every(10).Minutes().Do(commands.CreatePayments)
 
 	cron.StartBlocking()
 

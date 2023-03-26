@@ -8,6 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type Tabler interface {
+	TableName() string
+}
+
 func Connect() (*gorm.DB, error) {
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
