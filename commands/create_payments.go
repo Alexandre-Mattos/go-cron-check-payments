@@ -67,7 +67,7 @@ func CreatePayments() {
 			Joins("JOIN locacao_inquilinos ON locacao_inquilinos.locacao_id = locacoes.id").
 			Joins("LEFT JOIN clientes ON clientes.id = contas.cliente_id").
 			Where("locacao_inquilinos.forma_cobranca = ?", "boleto_bancario").
-			Select("contas.valor, contas.descricao, contas.empresa_id, contas.origem_id, clientes.customer_id as customer_id, contas.id").
+			Select("contas.valor, contas.descricao, contas.empresa_id, contas.origem_id, clientes.customer_id as customer_id, contas.id, contas.data_vencimento").
 			Find(&contas)
 
 		for _, conta := range contas {

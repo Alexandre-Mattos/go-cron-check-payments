@@ -8,7 +8,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	sdk "github.com/Alexandre-Mattos/go-asaas-sdk-main"
 )
@@ -24,7 +23,7 @@ func CreatePayment(conta models.Conta) (*models.Cobranca, bool) {
 
 	paymentBoleto := sdk.PaymentBoleto{
 		Customer:    conta.CustomerId,
-		DueDate:     time.Now().String(),
+		DueDate:     conta.DataVencimento,
 		Value:       conta.Valor,
 		Description: conta.Descricao,
 	}
