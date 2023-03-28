@@ -1,21 +1,18 @@
 package models
 
-import "gorm.io/gorm"
-
 func (Cobranca) TableName() string {
 	return "boletos"
 }
 
 type Cobranca struct {
-	gorm.Model
-	ID                int
-	ContaID           int
-	Status            bool
-	TransactionID     string
-	UrlGerarCobranca  string
-	EmpresaID         int
-	GeracaoAutomatica bool
-	Situacao          string
+	ID                int    `gorm:"column:id"`
+	EmpresaID         int    `gorm:"column:empresa_id"`
+	ContaID           int    `gorm:"column:conta_id"`
+	Status            bool   `gorm:"column:status"`
+	TransactionID     string `gorm:"column:transaction_id"`
+	UrlGerarCobranca  string `gorm:"column:url_gerar_cobranca"`
+	GeracaoAutomatica bool   `gorm:"column:geracao_automatica"`
+	Situacao          string `gorm:"column:situacao"`
 }
 
 func (CobrancaTaxa) TableName() string {
@@ -23,10 +20,9 @@ func (CobrancaTaxa) TableName() string {
 }
 
 type CobrancaTaxa struct {
-	gorm.Model
-	EmpresaID       int
-	BoletoId        int
-	ValorReal       float32
-	ValorPercentual float32
-	Tipo            string
+	EmpresaID       int     `gorm:"column:empresa_id"`
+	BoletoId        int     `gorm:"column:boleto_id"`
+	ValorReal       float32 `gorm:"column:valor_real"`
+	ValorPercentual float32 `gorm:"column:valor_percentual"`
+	Tipo            string  `gorm:"column:tipo"`
 }

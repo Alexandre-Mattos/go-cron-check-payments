@@ -12,14 +12,14 @@ import (
 	sdk "github.com/Alexandre-Mattos/go-asaas-sdk-main"
 )
 
-func CreatePayment(conta models.Conta) (*models.Cobranca, bool) {
+func CreatePayment(conta models.Conta, empresa models.Empresa) (*models.Cobranca, bool) {
 
 	db, err := database.Connect()
 	if err != nil {
 		logger.Send(err.Error(), "error")
 	}
 
-	client := sdk.NewAsaasClient(os.Getenv("ASAAS_KEY"))
+	client := sdk.NewAsaasClient(empresa.AsaasKey)
 
 	paymentBoleto := sdk.PaymentBoleto{
 		Customer:    conta.CustomerId,
@@ -123,7 +123,6 @@ func CreatePayment(conta models.Conta) (*models.Cobranca, bool) {
 		return &cobrancaExistente, false
 	}
 
-	logger.Send(paymentBoleto.Customer, "debug")
 	boletoResponse, errAPI, err := client.PaymentBoleto("", paymentBoleto)
 	if err != nil {
 		logger.Send(err.Error(), "error")
@@ -174,13 +173,14 @@ func CreatePayment(conta models.Conta) (*models.Cobranca, bool) {
 
 		}
 
-		db.Create(&cobrancaTaxa)
+		db.Unscoped().Create(&cobrancaTaxa)
 	}
 
 	taxaAsaas := boletoResponse.Value - boletoResponse.NetValue
 
 	if taxaAsaas != 0 {
 		cobrancaTaxa := models.CobrancaTaxa{
+			BoletoId:        cobranca.ID,
 			EmpresaID:       conta.EmpresaID,
 			Tipo:            "asaas",
 			ValorReal:       taxaAsaas,

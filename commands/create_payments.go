@@ -74,7 +74,7 @@ func CreatePayments() {
 			fmt.Println(conta.ID)
 
 			var pointer *models.Cobranca = new(models.Cobranca)
-			pointer, success := asaas.CreatePayment(conta)
+			pointer, success := asaas.CreatePayment(conta, empresa)
 			if pointer != nil {
 				cobranca := *pointer
 				if success {
@@ -84,7 +84,7 @@ func CreatePayments() {
 		}
 
 		if len(contasID) >= 1 {
-			logger.Send("Contas geradas em "+time.Now().String()+": "+strings.Join(contasID, ","), "success")
+			logger.Send("Contas geradas em "+time.Now().Format("2006-01-02 15:04:05")+": "+strings.Join(contasID, ","), "success")
 		} else {
 			logger.Send("Nenhuma cobrança gerada em: "+time.Now().Format("2006-01-02 15:04:05"), "warning")
 		}

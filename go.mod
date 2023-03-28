@@ -18,6 +18,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rafaeltokyo/asaas-go-sdk v0.0.0-20191115182011-e4777bfd8a7f // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 	golang.org/x/net v0.8.0 // indirect

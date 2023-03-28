@@ -3,7 +3,6 @@ package main
 import (
 	"go-cron-check-payments/app"
 	"go-cron-check-payments/kernel"
-	//"go-cron-check-payments/kernel"
 )
 
 func main() {
